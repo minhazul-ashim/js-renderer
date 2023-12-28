@@ -35,13 +35,18 @@ const loadVideos = (categoryId) => {
         videosContainer.insertAdjacentHTML("beforeend", noVideosHTML);
         return;
       }
-      data.data.forEach((el) => generateSingleVideo(videosContainer, el));
+      const allVideos = data?.data?.sort(
+        (first, second) => second.others.views - first.others.views
+      );
+      allVideos.forEach((el) => generateSingleVideo(videosContainer, el));
     });
 };
 
 const generateSingleVideo = (container, video) => {
   const { thumbnail, category_id, title, authors, others } = video;
-
+  console.log();
+  const hours = Math.floor(others.posted_date / 3600);
+  const minutes = Math.ceil((others.posted_date % 3600) / 60);
   const element = `<div class="singleVideo" id=${category_id}>
             <div class="videoThumbailContainer" id="videoThumbailContainer">
               <img
@@ -49,7 +54,11 @@ const generateSingleVideo = (container, video) => {
                 class="videoThumbnail"
                 alt=""
               />
-              <p class="videoLength">Video Length</p>
+              ${
+                others?.posted_date
+                  ? `<p class="videoLength">${`${hours} hours ${minutes} minutes ago`}</p>`
+                  : ""
+              }
             </div>
             <div class="videoInfoContainer">
               <div class="videoAuthor">
@@ -61,7 +70,9 @@ const generateSingleVideo = (container, video) => {
               </div>
               <div class="videoInfo">
                 <p class="videoName">${title}</p>
-                <p class="videoAuthorName">${authors[0].profile_name}</p>
+                <p class="videoAuthorName">${authors[0].profile_name} ${
+    authors[0].verified ? `<span class="tickMark">&check;</span>` : ""
+  }</p>
                 <p class="videoViews">${others.views}</p>
               </div>
             </div>
