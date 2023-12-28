@@ -1,3 +1,21 @@
+let videos = [];
+
+const sortVideosByViews = () => {
+    videos.sort((a, b) => {
+      return (
+        parseInt(b.others.views.split("K")[0]) -
+        parseInt(a.others.views.split("K")[0])
+      );
+  });
+  updateUI();
+};
+
+const updateUI = () => {
+  const videosContainer = document.getElementById("videosContainer");
+  videosContainer.innerHTML = "";
+  videos.forEach((el) => generateSingleVideo(videosContainer, el));
+};
+
 document.addEventListener("DOMContentLoaded", () => {
   fetch("https://openapi.programming-hero.com/api/videos/categories")
     .then((res) => {
@@ -19,7 +37,7 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     })
     .catch((error) => {
-      console.error("Error fetching data:", error);
+      console.error("error:", error);
     });
 });
 
@@ -31,14 +49,12 @@ const loadVideos = (categoryId) => {
   )
     .then((res) => res.json())
     .then((data) => {
-      if (!data.data.length) {
+      videos = [...data.data];
+      if (!videos.length) {
         videosContainer.insertAdjacentHTML("beforeend", noVideosHTML);
         return;
       }
-      const allVideos = data?.data?.sort(
-        (first, second) => second.others.views - first.others.views
-      );
-      allVideos.forEach((el) => generateSingleVideo(videosContainer, el));
+      videos.forEach((el) => generateSingleVideo(videosContainer, el));
     });
 };
 
