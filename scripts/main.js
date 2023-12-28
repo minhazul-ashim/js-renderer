@@ -1,11 +1,11 @@
 let videos = [];
 
 const sortVideosByViews = () => {
-    videos.sort((a, b) => {
-      return (
-        parseInt(b.others.views.split("K")[0]) -
-        parseInt(a.others.views.split("K")[0])
-      );
+  videos.sort((a, b) => {
+    return (
+      parseInt(b.others.views.split("K")[0]) -
+      parseInt(a.others.views.split("K")[0])
+    );
   });
   updateUI();
 };
@@ -98,7 +98,12 @@ const generateSingleVideo = (container, video) => {
 };
 
 const categoryChange = (e) => {
+  const childrens = document.getElementById("categoryBtnContainer").childNodes;
+  childrens.forEach((el) => {
+    el.classList.remove("navBtn_active");
+  });
   const categoryId = e.target.getAttribute("data-id");
+  e.target.classList.add("navBtn_active");
   loadVideos(categoryId);
 };
 
