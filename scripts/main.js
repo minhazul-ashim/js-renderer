@@ -9,6 +9,8 @@ document.addEventListener("DOMContentLoaded", () => {
       data.data.forEach((el, i) => {
         const btnElement = document.createElement("button");
         btnElement.classList.add("navBtn");
+        btnElement.setAttribute("data-id", el.category_id);
+        btnElement.addEventListener("click", categoryChange);
         if (i === 0) {
           btnElement.classList.add("navBtn_active");
         }
@@ -23,11 +25,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
 const loadVideos = (categoryId) => {
   const videosContainer = document.getElementById("videosContainer");
+  videosContainer.innerHTML = "";
   fetch(
     `https://openapi.programming-hero.com/api/videos/category/${categoryId}`
   )
     .then((res) => res.json())
     .then((data) => {
+      if (!data.data.length) {
+        videosContainer.insertAdjacentHTML("beforeend", noVideosHTML);
+        return;
+      }
       data.data.forEach((el) => generateSingleVideo(videosContainer, el));
     });
 };
@@ -35,7 +42,7 @@ const loadVideos = (categoryId) => {
 const generateSingleVideo = (container, video) => {
   const { thumbnail, category_id, title, authors, others } = video;
 
-  const element = `<div class="singleVideo" id="singleVideo">
+  const element = `<div class="singleVideo" id=${category_id}>
             <div class="videoThumbailContainer" id="videoThumbailContainer">
               <img
                 src=${thumbnail}
@@ -62,3 +69,15 @@ const generateSingleVideo = (container, video) => {
 
   container.insertAdjacentHTML("beforeend", element);
 };
+
+const categoryChange = (e) => {
+  const categoryId = e.target.getAttribute("data-id");
+  loadVideos(categoryId);
+};
+
+const noVideosHTML = `<div class="noVideos">
+        <img src="./assets/Icon.png" alt="">
+        <div class="noVideosText">
+          <h5>Sorry! No Videos Found!</h5>
+        </div>
+      </div>`;

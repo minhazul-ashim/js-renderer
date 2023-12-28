@@ -60,6 +60,11 @@ body {
   padding: 8px 16px;
   border-radius: 8px;
   cursor: pointer;
+  transition: all 0.3s;
+}
+
+.navBtn:hover {
+  background-color: rgba(180, 180, 180, 0.925);
 }
 
 .navBtn_active {
@@ -147,6 +152,20 @@ body {
   font-size: 16px;
   font-weight: 400;
   color: gray;
+}
+
+.noVideos {
+  display: flex;
+  flex-direction: column;
+  width: 100vw;
+  height: 60vh;
+  justify-content: center;
+  align-items: center;
+}
+
+.noVideosText {
+  font-size: 32px;
+  margin-top: 24px;
 }
 
 @media only screen and (min-width: 768px) {
